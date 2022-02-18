@@ -1,7 +1,11 @@
 import React from "react"
-
+import AddButton from "@material-ui/icons/Add"
+import Fab from "@material-ui/core/Fab"
+import Zoom from "@material-ui/core/Zoom"
+import Collapse from '@material-ui/core/Collapse';
 
 function NewNote(props) {
+    const [isExpanded, setExpanded] = React.useState(false)
     const [addNote, setAddNote] = React.useState({
         title: "",
         content: ""
@@ -25,17 +29,27 @@ function NewNote(props) {
         }))
     }
 
+    function expand () {
+        setExpanded(true)
+    }
+
 
     return(
       <div>
         <div class="form">
-          <input onChange={handleChange} name="title" placeholder="Title" value={addNote.title} />
-          <textarea onChange={handleChange} name="content" placeholder="Take a note..." rows="3" value={addNote.content} />
-          <button onClick={() => 
-            {props.newNote(addNote);
-            setAddNote({title: "",
-            content: ""});
-            }}>Add</button>
+        <Collapse in={true}>
+        {isExpanded ? <input onChange={handleChange} name="title" placeholder="Title" value={addNote.title} /> : null}
+
+          <textarea onClick={expand} onChange={handleChange} name="content" placeholder="Take a note..." rows={isExpanded ? "3" : "1"} value={addNote.content} />
+          <Zoom in={isExpanded ? true : null}>          
+            <Fab onClick={() => 
+                {props.newNote(addNote);
+                setAddNote({title: "",
+                content: ""});
+                }}><AddButton />
+            </Fab>
+          </Zoom>
+          </Collapse>
         </div>
       </div>
     )
